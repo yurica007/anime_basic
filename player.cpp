@@ -18,6 +18,7 @@ Player::Player()
 
 	m_animeNo = 0;
 	m_animeFrame = 0;
+	m_dirNo = 0;
 }
 
 Player::~Player()
@@ -35,37 +36,42 @@ void Player::init()
 
 	m_animeNo = 0;
 	m_animeFrame = 0;
+	m_dirNo = 0;
 }
 
 void Player::update()
 {
-	m_animeFrame++;
+	// パッド(もしくはキーボード)からの入力を取得する
+	int padState = GetJoypadInputState(DX_INPUT_KEY_PAD1);
+	bool isKey = false;
+	if (padState & PAD_INPUT_UP)
+	{
+		m_dirNo = 3;
+		isKey = true;
+	}
+	if (padState & PAD_INPUT_DOWN)
+	{
+		m_dirNo = 0;
+		isKey = true;
+	}
+	if (padState & PAD_INPUT_LEFT)
+	{
+		m_dirNo = 1;
+		isKey = true;
+	}
+	if (padState & PAD_INPUT_RIGHT)
+	{
+		m_dirNo = 2;
+		isKey = true;
+	}
 
+	if (isKey) m_animeFrame++;
 	if (m_animeFrame >= kGraphicDivX * kAnimeChangeFrame)
 	{
 		m_animeFrame = 0;
 	}
-
-	m_animeNo = m_animeFrame / kAnimeChangeFrame;
-
-	// パッド(もしくはキーボード)からの入力を取得する
-	int padState = GetJoypadInputState(DX_INPUT_KEY_PAD1);
-	if (padState & PAD_INPUT_UP)
-	{
-
-	}
-	if (padState & PAD_INPUT_DOWN)
-	{
-
-	}
-	if (padState & PAD_INPUT_LEFT)
-	{
-
-	}
-	if (padState & PAD_INPUT_RIGHT)
-	{
-
-	}
+	int tempAnimeNo = m_animeFrame / kAnimeChangeFrame;
+	m_animeNo =m_dirNo * kGraphicDivX + tempAnimeNo;
 }
 
 void Player::draw()
