@@ -5,32 +5,49 @@
 
 namespace
 {
-	// キャラクターのサイズ
-	constexpr int kSizeX = 32;
-	constexpr int kSizeY = 32;
+	//キャラクターアニメーション1コマ当たりのフレーム数
+	constexpr int kAnimeChangeFrame = 8;
 }
 
 Player::Player()
 {
-	// 初期化
-	m_handle = -1;
+	for (auto& handle : m_handle)
+	{
+		handle = -1;
+	}
+
+	m_animeNo = 0;
+	m_animeFrame = 0;
 }
 
 Player::~Player()
 {
-	
+
 }
 
+//初期化
 void Player::init()
 {
-	m_pos.x = Game::kScreenWidth / 2 - kSizeX / 2;
-	m_pos.y = Game::kScreenHeight / 2 - kSizeY / 2;
+	m_pos.x = Game::kScreenWidth / 2 - kGraphicSizeX / 2;
+	m_pos.y = Game::kScreenHeight / 2 - kGraphicSizeY / 2;
 	m_vec.x = 0.0f;
 	m_vec.y = 0.0f;
+
+	m_animeNo = 0;
+	m_animeFrame = 0;
 }
 
 void Player::update()
 {
+	m_animeFrame++;
+
+	if (m_animeFrame >= kGraphicDivX * kAnimeChangeFrame)
+	{
+		m_animeFrame = 0;
+	}
+
+	m_animeNo = m_animeFrame / kAnimeChangeFrame;
+
 	// パッド(もしくはキーボード)からの入力を取得する
 	int padState = GetJoypadInputState(DX_INPUT_KEY_PAD1);
 	if (padState & PAD_INPUT_UP)
@@ -53,5 +70,5 @@ void Player::update()
 
 void Player::draw()
 {
-	DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_handle, true);
+	DrawGraph(static_cast<int>(m_pos.x), static_cast<int>(m_pos.y), m_handle[m_animeNo], true);
 }

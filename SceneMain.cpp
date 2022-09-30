@@ -2,9 +2,18 @@
 #include <cassert>
 #include "SceneMain.h"
 
+namespace
+{
+	//グラフィックファイル名
+	const char* const kPlayerGraphicFikename = "data/char.png";
+}
+
 SceneMain::SceneMain()
 {
-	m_hPlayerGraphic = -1;
+	for (auto& handle : m_hPlayerGraphic)
+	{
+		handle = -1;
+	}
 }
 SceneMain::~SceneMain()
 {
@@ -14,15 +23,25 @@ SceneMain::~SceneMain()
 // 初期化
 void SceneMain::init()
 {
-	m_hPlayerGraphic = LoadGraph("data/char.png");
-	m_player.setHandle(m_hPlayerGraphic);
+	LoadDivGraph("data/char.png", Player::kGraphicDivNum,
+		Player::kGraphicDivX, Player::kGraphicDivY,
+		Player::kGraphicSizeX, Player::kGraphicSizeY, m_hPlayerGraphic);
+
+	for (int i = 0; i < Player::kGraphicDivNum; i++)
+	{
+		m_player.setHandle(i, m_hPlayerGraphic[i]);
+	}
 	m_player.init();
 }
 
 // 終了処理
 void SceneMain::end()
 {
-	DeleteGraph(m_hPlayerGraphic);
+	for (auto& handle : m_hPlayerGraphic)
+	{
+		DeleteGraph(handle);
+	}
+
 }
 
 // 毎フレームの処理
