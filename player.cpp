@@ -47,21 +47,25 @@ void Player::update()
 	if (padState & PAD_INPUT_UP)
 	{
 		m_dirNo = 3;
-		isKey = true;
+		m_pos.y -= 2;
+		isKey = true;	
 	}
-	if (padState & PAD_INPUT_DOWN)
+	else if (padState & PAD_INPUT_DOWN)
 	{
 		m_dirNo = 0;
+		m_pos.y += 2;
 		isKey = true;
 	}
-	if (padState & PAD_INPUT_LEFT)
+	else if (padState & PAD_INPUT_LEFT)
 	{
 		m_dirNo = 1;
+		m_pos.x -= 2;
 		isKey = true;
 	}
-	if (padState & PAD_INPUT_RIGHT)
+	else if (padState & PAD_INPUT_RIGHT)
 	{
 		m_dirNo = 2;
+		m_pos.x += 2;
 		isKey = true;
 	}
 

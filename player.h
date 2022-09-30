@@ -44,5 +44,7 @@ private:
 	//キャラクターのアニメーション
 	int m_animeNo;	//表示する番号
 	int m_animeFrame;
-	int m_dirNo;	// 進行方向	
+	int m_dirNo;	// 進行方向
+
+	int m_waitFrame;
 };
